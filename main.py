@@ -41,6 +41,10 @@ def request_champ_and_role():
 
 #This is the main method that runs the code
 def main():
-    request_champ_and_role()
+    user_response = request_champ_and_role()
+    champion_info_finder = WebCrawler(user_response[0], user_response[1])
+    champion_info_finder.requested_info_builder(True, True, True, True, True)
+    print(champion_info_finder.image_locater(champion_info_finder.highest_win_rate_final_items_build))
+
 
 main()

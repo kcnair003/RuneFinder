@@ -10,6 +10,35 @@ class WebCrawler():
         URL = 'https://champion.gg/champion/' + champ_name + '/' + role
         self.page = requests.get(URL)
 
+    #This method prepares the Web Scraper based on the desired information
+    def requested_info_builder(self, starting_items=False, summoners_spells=False, final_items=False, primary_runes=False, secondary_runes=False):
+        self.champion_highest_winrate_build_info_web_scraper().champion_highest_winrate_build_items_and_runes_web_scraper().item_builder(starting_items, summoners_spells, final_items).rune_builder(primary_runes, secondary_runes)
+        return self
+        
+    #This method prepares the WebCrawler to find requested item information
+    def item_builder(self, starting_items, summoners_spells, final_items):
+        if starting_items or summoners_spells or final_items:
+            self.champion_highest_winrate_build_items_web_scraper()
+            if final_items:
+                self.champion_highest_winrate_build_final_items_web_scraper()
+            if starting_items or summoners_spells:
+                self.champion_highest_winrate_build_summoner_spells_and_starting_items_web_scraper()
+                if starting_items:
+                    self.champion_highest_winrate_build_starting_items_web_scraper()
+                else:
+                    self.champion_highest_winrate_build_summoner_spells_web_scraper()
+        return self
+
+    #This method prepares the WebCrawler to find requested rune information
+    def rune_builder(self, primary_runes, secondary_runes):
+        if primary_runes or secondary_runes:
+            self.champion_highest_winrate_build_runes_web_scraper()
+            if primary_runes:
+                self.champion_highest_winrate_build_primary_runes_web_scraper()
+            else:
+                self.champion_highest_winrate_build_secondary_runes_web_scraper()
+        return self
+
     #This method traverses an html element to find all the underlying images and returns said list    
     def image_locater(self, image_location):
         final_images = []
@@ -40,7 +69,7 @@ class WebCrawler():
         return self
 
     #This method scrapes the highest win rate build items for its final build
-    def champion_highest_winrate_build_final_build_web_scraper(self):
+    def champion_highest_winrate_build_final_items_web_scraper(self):
         self.highest_win_rate_final_items_build = self.highest_win_rate_build_items_children[2]
         return self
 
@@ -56,7 +85,7 @@ class WebCrawler():
 
     #This method scrapes the highest win rate build summoner spells and starting items for its starting items
     def champion_highest_winrate_build_starting_items_web_scraper(self):
-        self.highest_win_rate_build_summoner_spells = self.highest_win_rate_build_summoner_spells_and_starting_items_children[2]
+        self.highest_win_rate_build_starting_items = self.highest_win_rate_build_summoner_spells_and_starting_items_children[2]
         return self
 
     #This method scrapes the highest win rate build items and runes for its runes
