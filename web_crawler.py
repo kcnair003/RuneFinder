@@ -1,5 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
+import re
 
 class WebCrawler():
 
@@ -9,6 +10,41 @@ class WebCrawler():
         self.role = role
         URL = 'https://champion.gg/champion/' + champ_name + '/' + role
         self.page = requests.get(URL)
+
+    #This method traverses an html element to find all the underlying images and returns said list    
+    def image_locater(self, image_location):
+        final_images = []
+        found_images = image_location.findAll("img")
+        for image in found_images:
+            if image:
+                final_images.append(image)
+        return final_images
+
+    #This method traverses an html element for items to find all the underlying images and returns said list    
+    def items_image_locater(self, image_location):
+        final_images = []
+        found_images = image_location.findAll("img", alt=True)
+        for image in found_images:
+            if image:
+                final_images.append(image['alt'])
+        return final_images
+
+    #This method traverses an html element to find the names for runes by default but you can specify requested items to False for summoner spells
+    def spells_and_runes_image_locater(self, image_location, requested_runes=True):
+        if requested_runes:
+            requested_item = 'rune'
+        else:
+            requested_item = 'spell'
+        final_images = []
+        found_images = image_location.findAll("img")
+        for image in found_images:
+            if image:
+                try:
+                    image_name = re.search('<' + requested_item + 'name>(.+?)</' + requested_item + 'name>',image['data-tip']).group(1)
+                    final_images.append(image_name)
+                except AttributeError:
+                    pass
+        return final_images
 
     #This method prepares the Web Scraper based on the desired information
     def requested_info_builder(self, starting_items=False, summoners_spells=False, final_items=False, primary_runes=False, secondary_runes=False):
@@ -25,7 +61,7 @@ class WebCrawler():
                 self.champion_highest_winrate_build_summoner_spells_and_starting_items_web_scraper()
                 if starting_items:
                     self.champion_highest_winrate_build_starting_items_web_scraper()
-                else:
+                if summoners_spells:
                     self.champion_highest_winrate_build_summoner_spells_web_scraper()
         return self
 
@@ -35,18 +71,9 @@ class WebCrawler():
             self.champion_highest_winrate_build_runes_web_scraper()
             if primary_runes:
                 self.champion_highest_winrate_build_primary_runes_web_scraper()
-            else:
+            if secondary_runes:
                 self.champion_highest_winrate_build_secondary_runes_web_scraper()
         return self
-
-    #This method traverses an html element to find all the underlying images and returns said list    
-    def image_locater(self, image_location):
-        final_images = []
-        found_images = image_location.findAll("img")
-        for image in found_images:
-            if image:
-                final_images.append(image)
-        return final_images
 
     #This method scrapes the web page for the highest win rate build element
     def champion_highest_winrate_build_info_web_scraper(self):
