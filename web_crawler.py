@@ -20,21 +20,16 @@ class WebCrawler():
                 final_images.append(image)
         return final_images
 
-    #This method traverses an html element for items to find all the underlying images and returns said list    
-    def items_image_locater(self, image_location):
-        final_images = []
-        found_images = image_location.findAll("img", alt=True)
-        for image in found_images:
-            if image:
-                final_images.append(image['alt'])
-        return final_images
-
-    #This method traverses an html element to find the names for runes by default but you can specify requested items to False for summoner spells
-    def spells_and_runes_image_locater(self, image_location, requested_runes=True):
-        if requested_runes:
+    #This method traverses an html element to find the names for the requested object. By default, the requested object param is set to 1 for items, but can be set to 2 for runes or 3 for summoner spells
+    def image_name_locater(self, image_location, requested_object=1):
+        if requested_object==1:
+            requested_item = 'item'
+        elif requested_object==2:
             requested_item = 'rune'
-        else:
+        elif requested_object==3:
             requested_item = 'spell'
+        else:
+            raise ValueError
         final_images = []
         found_images = image_location.findAll("img")
         for image in found_images:

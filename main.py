@@ -44,11 +44,11 @@ def main():
     user_response = request_champ_and_role()
     champion_info_finder = WebCrawler(user_response[0], user_response[1])
     champion_info_finder.requested_info_builder(True, True, True, True, True)
-    print(champion_info_finder.items_image_locater(champion_info_finder.highest_win_rate_build_starting_items))
-    print(champion_info_finder.spells_and_runes_image_locater(champion_info_finder.highest_win_rate_build_summoner_spells, False))
-    print(champion_info_finder.spells_and_runes_image_locater(champion_info_finder.highest_win_rate_runes_primary_tree))
-    print(champion_info_finder.spells_and_runes_image_locater(champion_info_finder.highest_win_rate_runes_secondary_tree))
-    print(champion_info_finder.items_image_locater(champion_info_finder.highest_win_rate_final_items_build))
+    print(champion_info_finder.image_name_locater(champion_info_finder.highest_win_rate_build_starting_items))
+    print(champion_info_finder.image_name_locater(champion_info_finder.highest_win_rate_build_summoner_spells, 3))
+    print(champion_info_finder.image_name_locater(champion_info_finder.highest_win_rate_runes_primary_tree, 2))
+    print(champion_info_finder.image_name_locater(champion_info_finder.highest_win_rate_runes_secondary_tree, 2))
+    print(champion_info_finder.image_name_locater(champion_info_finder.highest_win_rate_final_items_build))
 
 
 main()
