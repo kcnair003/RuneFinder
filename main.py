@@ -1,7 +1,7 @@
 import requests
 import time
 from bs4 import BeautifulSoup
-from web_crawler import WebCrawler
+from blitz_crawler import BlitzCrawler
 
 #Prints lines in animated sequence
 def delay_print(item):
@@ -9,7 +9,7 @@ def delay_print(item):
         print(character, end='', flush=True)
         time.sleep(0.05)
 
-#Converts lists into string USED:Summoners,Runes
+#Converts lists into string; USED:Summoners,Runes
 def list_to_string(list):
     final_string=""
     for thing in list:
@@ -18,7 +18,7 @@ def list_to_string(list):
             final_string+=", "
     return final_string
         
-#Converts list into fancy string USED: Build
+#Converts list into fancy string; USED: Build
 def list_to_build(list):
     final_string=""
     for item in list:

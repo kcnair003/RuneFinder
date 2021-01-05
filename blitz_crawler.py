@@ -2,9 +2,9 @@ import requests
 from bs4 import BeautifulSoup
 import re
 
-class WebCrawler():
+class BlitzCrawler():
 
-    #Creates the WebCrawler and gets the URL
+    #Creates the BlitzCrawler and gets the URL
     def __init__(self, champ_name, role):
         self.champ_name = champ_name
         self.role = role
@@ -16,7 +16,7 @@ class WebCrawler():
         self.winrate_build_scraper().winrate_build_items_and_runes_web_scraper().item_builder(starting_items, summoners_spells, final_items).rune_builder(primary_runes, secondary_runes)
         return self
     
-    #Prepares WebCrawler to find item info
+    #Prepares BlitzCrawler to find item info
     def item_builder(self, starting_items, summoners_spells, final_items):
         if starting_items or summoners_spells or final_items:
             self.winrate_build_items_web_scraper()
@@ -30,7 +30,7 @@ class WebCrawler():
                     self.winrate_build_summoner_spells_web_scraper()
         return self
 
-    #Prepares WebCrawler to find requested runes info
+    #Prepares BlitzCrawler to find requested runes info
     def rune_builder(self, primary_runes, secondary_runes):
         if primary_runes or secondary_runes:
             self.winrate_build_runes_web_scraper()
