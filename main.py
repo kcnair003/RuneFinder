@@ -60,7 +60,7 @@ def request_champ_and_role():
 #This is the main method that runs the code
 def main():
     user_response = request_champ_and_role()
-    champion_info_finder = WebCrawler(user_response[0], user_response[1])
+    champion_info_finder = BlitzCrawler(user_response[0], user_response[1])
     champion_info_finder.requested_info_builder(True, True, True, True, True)
     print("Starting items: " + list_to_string(champion_info_finder.image_name_locater(champion_info_finder.win_rate_build_starting_items))+"\n")
     print("Summoners: " + list_to_string(champion_info_finder.image_name_locater(champion_info_finder.win_rate_build_summoner_spells, 3))+"\n")
