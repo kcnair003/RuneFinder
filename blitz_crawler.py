@@ -12,7 +12,7 @@ class BlitzCrawler():
         self.page = requests.get(URL)
 
     #Prepares the Web Scraper based on the desired information
-    def requested_info_builder(self, starting_items=False, summoners_spells=False, final_items=False, primary_runes=False, secondary_runes=False):
+    def requested_info_builder(self, starting_items=False, summoners_spells=False, final_items=False, primary_runes=False, secondary_runes=False, skill_order=False, damage_breakdown=False):
         self.winrate_build_scraper()
         if starting_items or summoners_spells or final_items:
             self.winrate_build_items_web_scraper()
@@ -20,6 +20,8 @@ class BlitzCrawler():
                 self.winrate_build_summoner_spells_and_starting_items_web_scraper()
         if primary_runes or secondary_runes:
             self.winrate_build_runes_web_scraper()
+        if skill_order or damage_breakdown:
+            self.winrate_build_skill_order_web_scraper()
         return self
 
     #Finds the images and returns their descriptions    
@@ -31,7 +33,7 @@ class BlitzCrawler():
                 final_images.append(image)
         return final_images
 
-    #Find the names for the requested object. Default:items
+    #Find the names for the requested object. Default: items
     def image_name_locater(self, image_location, requested_object=1):
         if requested_object==1:
             requested_item = 'item'
@@ -52,6 +54,35 @@ class BlitzCrawler():
                     pass
         return final_images
     
+
+    #Find the text within a paragraph container
+    def paragraph_text_locator(self, div_location):
+        orders = []
+        found_orders = div_location.findAll("p")
+        for order in found_orders:
+            if order:
+                try:
+                    skill_name = order.getText()
+                    orders.append(skill_name)
+                except AttributeError:
+                    pass
+        return orders
+    
+
+    #Find the text within a div container
+    def div_text_locator(self, div_location):
+        orders = []
+        found_orders = div_location.findAll("div", width = True)
+        for order in found_orders:
+            if order:
+                try:
+                    skill_tuple = (order['type'], order['width'])
+                    orders.append(skill_tuple)
+                except AttributeError:
+                    pass
+        return orders
+
+
     #Scrapes web page for highest win rate build div container
     def winrate_build_scraper(self):
         soup = BeautifulSoup(self.page.content, 'html.parser')
@@ -61,6 +92,7 @@ class BlitzCrawler():
         win_rate_build_info = win_rate_build_container.find('div', class_="Inner-sc-7vmxjm-0 cpZSJT")
         self.win_rate_build_info_children = win_rate_build_info.findChildren('div', recursive=False)
         self.win_rate_build_items_and_runes_children = self.win_rate_build_info_children[0].findChildren('div', recursive=False)
+        self.win_rate_build_skill_order = self.win_rate_build_info_children[2]
         return self
 
     #Scrapes highest win rate build summoner spells, starting items, and final items div container
@@ -86,6 +118,12 @@ class BlitzCrawler():
         return self
 
     #Scrapes highest win rate build div container for skill order info
-    def winrate_build_skill_order(self):
-        self.win_rate_build_skill_order = self.win_rate_build_info_children[2]
+    def winrate_build_skill_order_web_scraper(self):
+        self.win_rate_build_skill_order_children = self.win_rate_build_skill_order.findChildren('div', recursive=False)
+        self.win_rate_build_skill_orders_children = self.win_rate_build_skill_order_children[1].findChildren('div', recursive=False)
+        self.win_rate_skill_children = self.win_rate_build_skill_orders_children[0].findChildren('div', recursive=False)
+        self.win_rate_skill_orders = self.win_rate_skill_children[0] #Skill Order
+        self.win_rate_build_damage_breakdown_children = self.win_rate_build_skill_orders_children[1].findChildren('div', recursive=False)
+        self.win_rate_build_damage_classification_children = self.win_rate_build_damage_breakdown_children[1].findChildren('div', recursive=False)
+        self.win_rate_damage_classification = self.win_rate_build_damage_classification_children[0] #Damage Breakdown
         return self

@@ -27,6 +27,15 @@ def list_to_build(list):
             final_string+=" -> "
     return final_string
 
+def tupled_list_to_string(list):
+    final_string = ""
+    for order in list:
+        if int(order[1]) > 65:
+            final_string = order[0].upper()
+            return final_string
+    final_string = "Hybrid"
+    return final_string
+
 #Requests for a set of answers from the range of starting value to the expected max
 def request_champ_and_role():
     proper_response = False
@@ -61,12 +70,14 @@ def request_champ_and_role():
 def main():
     user_response = request_champ_and_role()
     champion_info_finder = BlitzCrawler(user_response[0], user_response[1])
-    champion_info_finder.requested_info_builder(True, True, True, True, True)
+    champion_info_finder.requested_info_builder(True, True, True, True, True, True, True)
     print("Starting items: " + list_to_string(champion_info_finder.image_name_locater(champion_info_finder.win_rate_build_starting_items))+"\n")
     print("Summoners: " + list_to_string(champion_info_finder.image_name_locater(champion_info_finder.win_rate_build_summoner_spells, 3))+"\n")
     print("Primary Runes: " + list_to_string(champion_info_finder.image_name_locater(champion_info_finder.win_rate_runes_primary_tree, 2))+"\n")
     print("Secondary Runes: " + list_to_string(champion_info_finder.image_name_locater(champion_info_finder.win_rate_runes_secondary_tree, 2))+"\n")
     print("Build: " + list_to_build(champion_info_finder.image_name_locater(champion_info_finder.win_rate_final_items_build))+"\n")
+    print("Skill Order: " + list_to_build(champion_info_finder.paragraph_text_locator(champion_info_finder.win_rate_skill_orders))+"\n")
+    print("Damage Classification: " + tupled_list_to_string(champion_info_finder.div_text_locator(champion_info_finder.win_rate_damage_classification))+"\n")
 
 
 main()
