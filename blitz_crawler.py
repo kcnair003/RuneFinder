@@ -63,29 +63,29 @@ class BlitzCrawler():
         self.win_rate_build_items_and_runes_children = self.win_rate_build_info_children[0].findChildren('div', recursive=False)
         return self
 
-    #Scrapes the highest win rate build summoner spells, starting items, and final items div container
+    #Scrapes highest win rate build summoner spells, starting items, and final items div container
     def winrate_build_items_web_scraper(self):
         self.win_rate_build_items_children = self.win_rate_build_items_and_runes_children[0].findChildren('div', recursive=False)
         self.win_rate_final_items_build = self.win_rate_build_items_children[2]
         return self
 
-    #Scrapes the highest win rate build div container for its summoner spells and starting items
+    #Scrapes highest win rate build div container for its summoner spells and starting items
     def winrate_build_summoner_spells_and_starting_items_web_scraper(self):
         self.win_rate_build_summoner_spells_and_starting_items_children = self.win_rate_build_items_children[0].findChildren('div', recursive=False)
         self.win_rate_build_summoner_spells = self.win_rate_build_summoner_spells_and_starting_items_children[0]
         self.win_rate_build_starting_items = self.win_rate_build_summoner_spells_and_starting_items_children[2]
         return self
 
-    #Scrapes the highest win rate build runes div container for the primary and secondary runes
+    #Scrapes highest win rate build runes div container for runes
     def winrate_build_runes_web_scraper(self):
         win_rate_build_runes_children = self.win_rate_build_items_and_runes_children[1].findChildren('div', recursive=False)
         win_rate_runes_children = win_rate_build_runes_children[0].findChildren('div', recursive=False)
         self.win_rate_runes_tree_children = win_rate_runes_children[0].findChildren('div', recursive=False)
-        self.win_rate_runes_primary_tree = self.win_rate_runes_tree_children[0]
-        self.win_rate_runes_secondary_tree = self.win_rate_runes_tree_children[1]
+        self.win_rate_runes_primary_tree = self.win_rate_runes_tree_children[0] #Primary Runes
+        self.win_rate_runes_secondary_tree = self.win_rate_runes_tree_children[1] #Secondary Runes
         return self
 
-    #Scrapes the highest win rate build for its skill order info
+    #Scrapes highest win rate build div container for skill order info
     def winrate_build_skill_order(self):
         self.win_rate_build_skill_order = self.win_rate_build_info_children[2]
         return self
