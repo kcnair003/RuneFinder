@@ -1,27 +1,21 @@
-#rune_app.py
+# RuneFinder.py
 import os
+import random
+import requests
+import time
+from bs4 import BeautifulSoup
+from blitz_crawler import BlitzCrawler
 
-import discord
+from discord.ext import commands
 from dotenv import load_dotenv
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
-GUILD = os.getenv('DISCORD_GUILD')
 
-client = discord.Client()
+bot = commands.Bot(command_prefix='`')
 
-@client.event
-async def on_ready():
-    for guild in client.guilds:
-        if guild.name == GUILD:
-            break
+@bot.command()
+async def find(ctx, *, arg):
+    await ctx.send(arg)
 
-    print(
-        f'{client.user} is connected to the following guild:\n'
-        f'{guild.name}(id: {guild.id})\n'
-    )
-
-    members = '\n - '.join([member.name for member in guild.members])
-    print(f'Guild Members:\n - {members}')
-
-client.run(TOKEN)
+bot.run(TOKEN)
