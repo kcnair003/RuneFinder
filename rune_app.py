@@ -2,7 +2,6 @@
 import os
 import random
 import requests
-import time
 import discord
 from bs4 import BeautifulSoup
 from blitz_crawler import BlitzCrawler
@@ -42,7 +41,7 @@ from dotenv import load_dotenv
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 
-bot = commands.Bot(command_prefix='!')
+bot = commands.Bot(command_prefix='~')
 
 client = discord.Client()
 
