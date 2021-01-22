@@ -1,6 +1,7 @@
 # RuneFinder.py
 import os
 import random
+from urllib.error import HTTPError
 import requests
 import discord
 from bs4 import BeautifulSoup
@@ -63,7 +64,11 @@ async def find(ctx, *args):
         return
     list_of_proper_roles = ['Top', 'Mid', "ADC", "Jungle", "Support"]
     champ_role = list_of_proper_roles[list_of_roles.index(chosen_champ_and_role_cleaned[1].lower())]
-    champion_info_finder = BlitzCrawler(chosen_champ_and_role_cleaned[0], champ_role)
+    try:
+        champion_info_finder = BlitzCrawler(chosen_champ_and_role_cleaned[0], champ_role)
+    except HTTPError as e:
+        await ctx.send("\nThere was an internal server error. Try again in 24 hours and contact the developers if the problem persists. \n" + str(e))
+        return
     champion_info_finder.requested_info_builder(True, True, True, True, True, True, True)
     await ctx.send("Starting items: " + list_to_string(champion_info_finder.image_name_locater(champion_info_finder.win_rate_build_starting_items)) + 
     "\nSummoners: " + list_to_string(champion_info_finder.image_name_locater(champion_info_finder.win_rate_build_summoner_spells, 3)) + 
