@@ -1,6 +1,9 @@
-import requests
+from urllib.request import Request, urlopen
+from urllib.error import HTTPError
+from urllib.error import URLError
 from bs4 import BeautifulSoup
 import re
+import time
 
 class BlitzCrawler():
 
@@ -9,7 +12,18 @@ class BlitzCrawler():
         self.champ_name = champ_name
         self.role = role
         URL = 'https://champion.gg/champion/' + champ_name + '/' + role
-        self.page = requests.get(URL)
+        hdr = {'User-Agent': 'Mozilla/5.0'}
+        req = Request(URL,headers=hdr)
+        try:
+            self.page = urlopen(req)
+        except HTTPError as e:
+            if e.code == "500":
+                time.sleep(5)
+                self.page = urlopen(req)
+            else:
+                raise e
+                
+
 
     #Prepares the Web Scraper based on the desired information
     def requested_info_builder(self, starting_items=False, summoners_spells=False, final_items=False, primary_runes=False, secondary_runes=False, skill_order=False, damage_breakdown=False):
