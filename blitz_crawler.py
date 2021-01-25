@@ -99,7 +99,7 @@ class BlitzCrawler():
 
     #Scrapes web page for highest win rate build div container
     def winrate_build_scraper(self):
-        soup = BeautifulSoup(self.page.content, 'html.parser')
+        soup = BeautifulSoup(self.page, 'html.parser')
         results = soup.find('div', class_="Columns__Column-sc-24rxii-1 kbeXNP")
         info_children = results.findChildren('div', recursive=False)
         win_rate_build_container = info_children[1]
