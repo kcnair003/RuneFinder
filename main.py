@@ -73,7 +73,9 @@ def main():
         champion_info_finder = BlitzCrawler(user_response[0], user_response[1])
     except Exception as e:
         print(e)
-    champion_info_finder.requested_info_builder(True, True, True, True, True, True, True)
+    champion_info_finder.requested_info_builder(True, True, True, True, True, True, True, True, True, True)
+    print("Winning Lanes: " + list_to_string(champion_info_finder.image_name_locater(champion_info_finder.winlane_info, 4))+"\n")
+    print("Counter Lanes: " + list_to_string(champion_info_finder.image_name_locater(champion_info_finder.counterlane_info, 4))+"\n")
     print("Starting items: " + list_to_string(champion_info_finder.image_name_locater(champion_info_finder.win_rate_build_starting_items))+"\n")
     print("Summoners: " + list_to_string(champion_info_finder.image_name_locater(champion_info_finder.win_rate_build_summoner_spells, 3))+"\n")
     print("Primary Runes: " + list_to_string(champion_info_finder.image_name_locater(champion_info_finder.win_rate_runes_primary_tree, 2))+"\n")

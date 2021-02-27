@@ -23,10 +23,22 @@ class BlitzCrawler():
             else:
                 raise e
                 
+    #Prepares the web scraper to look for info
+    def requested_info_builder(self, matchups=False, winlane=False, counterlane=False, winrate=False, items=False, spells=False, build=False, main_runes=False, side_runes=False, skills=False, damage=False):
+        if matchups or winrate:
+            self.champion_data_scraper()
+        if matchups or winlane or counterlane:
+            self.requested_matchups_info_builder()
+        if winlane:
+            self.winlane_web_scraper()
+        if counterlane:
+            self.counterlane_web_scraper()
+        if winrate or items or spells or build or main_runes or side_runes or skills or damage:
+            self.requested_winrate_info_builder(starting_items=items, summoners_spells=spells, final_items=build, primary_runes=main_runes, secondary_runes=side_runes, skill_order=skills, damage_breakdown=damage)
+        return self
 
-
-    #Prepares the Web Scraper based on the desired information
-    def requested_info_builder(self, starting_items=False, summoners_spells=False, final_items=False, primary_runes=False, secondary_runes=False, skill_order=False, damage_breakdown=False):
+    #Prepares the win rate scraper based on the desired information
+    def requested_winrate_info_builder(self, starting_items=False, summoners_spells=False, final_items=False, primary_runes=False, secondary_runes=False, skill_order=False, damage_breakdown=False):
         self.winrate_build_scraper()
         if starting_items or summoners_spells or final_items:
             self.winrate_build_items_web_scraper()
@@ -55,6 +67,8 @@ class BlitzCrawler():
             requested_item = 'rune'
         elif requested_object==3:
             requested_item = 'spell' #summoner spell
+        elif requested_object==4:
+            requested_item = 'champ'
         else:
             raise ValueError
         final_images = []
@@ -62,7 +76,11 @@ class BlitzCrawler():
         for image in found_images:
             if image:
                 try:
-                    image_name = re.search('<' + requested_item + 'name>(.+?)</' + requested_item + 'name>',image['data-tip']).group(1)
+                    if not requested_item == 'champ':
+                        image_name = re.search('<' + requested_item + 'name>(.+?)</' + requested_item + 'name>',image['data-tip']).group(1)
+                        final_images.append(image_name)
+                    else:
+                        image_name = image['alt']
                     final_images.append(image_name)
                 except AttributeError:
                     pass
@@ -96,13 +114,34 @@ class BlitzCrawler():
                     pass
         return orders
 
+    #Scrapes web page for data
+    def champion_data_scraper(self):
+        soup = BeautifulSoup(self.page, 'html.parser')
+        results = soup.find('div', class_="Columns__Column-sc-24rxii-1 kbeXNP")
+        self.info_children = results.findChildren('div', recursive=False)
+        return self
+
+    #Scrapes matchups div container for counterpicks
+    def requested_matchups_info_builder(self):
+        matchups_container = self.info_children[3]
+        matchups_info = matchups_container.find('div', class_="Inner-sc-7vmxjm-0 cpZSJT")
+        self.matchups_info_children = matchups_info.findChildren('div', recursive=False)
+        self.lane_info_children = self.matchups_info_children[0].findChildren('div', recursive=False)
+        return self
+
+    #Scrapes for winning matchups
+    def winlane_web_scraper(self):
+        self.winlane_info = self.lane_info_children[0]
+        return self
+
+    #Scrapes for losing matchups
+    def counterlane_web_scraper(self):
+        self.counterlane_info = self.lane_info_children[2]
+        return self
 
     #Scrapes web page for highest win rate build div container
     def winrate_build_scraper(self):
-        soup = BeautifulSoup(self.page, 'html.parser')
-        results = soup.find('div', class_="Columns__Column-sc-24rxii-1 kbeXNP")
-        info_children = results.findChildren('div', recursive=False)
-        win_rate_build_container = info_children[1]
+        win_rate_build_container = self.info_children[1]
         win_rate_build_info = win_rate_build_container.find('div', class_="Inner-sc-7vmxjm-0 cpZSJT")
         self.win_rate_build_info_children = win_rate_build_info.findChildren('div', recursive=False)
         self.win_rate_build_items_and_runes_children = self.win_rate_build_info_children[0].findChildren('div', recursive=False)
@@ -140,15 +179,6 @@ class BlitzCrawler():
         self.win_rate_build_damage_breakdown_children = self.win_rate_build_skill_orders_children[1].findChildren('div', recursive=False)
         self.win_rate_build_damage_classification_children = self.win_rate_build_damage_breakdown_children[1].findChildren('div', recursive=False)
         self.win_rate_damage_classification = self.win_rate_build_damage_classification_children[0] #Damage Breakdown
-        return self
-
-    #Scrapes Matchups div container for counterpicks
-    def matchups_counterpicks_web_scraper(self):
-        matchups_container = info_children[3]
-        matchups_info = matchups_container.find('div', class_="Inner-sc-7vmxjm-0 cpZSJT")
-        self.matchups_info_children = matchups_info.findChildren('div', recursive=False)
-        self.matchups_info_children_next = self.matchups_info_children[0].findChildren('div', recursive=False)
-        self.matchups_info_children_next1 = self.matchups_info_children_next[2].findChildren('div', recursive=False)
         return self
 
 
