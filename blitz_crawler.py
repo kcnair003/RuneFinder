@@ -141,3 +141,14 @@ class BlitzCrawler():
         self.win_rate_build_damage_classification_children = self.win_rate_build_damage_breakdown_children[1].findChildren('div', recursive=False)
         self.win_rate_damage_classification = self.win_rate_build_damage_classification_children[0] #Damage Breakdown
         return self
+
+    #Scrapes Matchups div container for counterpicks
+    def matchups_counterpicks_web_scraper(self):
+        matchups_container = info_children[3]
+        matchups_info = matchups_container.find('div', class_="Inner-sc-7vmxjm-0 cpZSJT")
+        self.matchups_info_children = matchups_info.findChildren('div', recursive=False)
+        self.matchups_info_children_next = self.matchups_info_children[0].findChildren('div', recursive=False)
+        self.matchups_info_children_next1 = self.matchups_info_children_next[2].findChildren('div', recursive=False)
+        return self
+
+
