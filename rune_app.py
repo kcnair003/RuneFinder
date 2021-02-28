@@ -87,10 +87,8 @@ async def find(ctx, *args):
     "\nDamage Classification: " + tupled_list_to_string(champion_info_finder.div_text_locator(champion_info_finder.win_rate_damage_classification))+"\n"
     )
 
-bot.run(TOKEN)
-
 @bot.command("help")
-async def find(ctx, *args):
+async def help(ctx, *args):
     if ctx.author.bot:
         return
     ctx.send("\nIn order to use RuneFinder. Use the command `find before the a champion and its associated lane i.e. `find Ahri Mid")
