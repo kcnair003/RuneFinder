@@ -65,7 +65,7 @@ async def find(ctx, *args):
         await ctx.send("\nThat response contained a lane that does not exist. Please respond with one of the following lane options: Top, Mid, Jungle, ADC, or Support \n")
         return
     except Exception:
-        await ctx.send("\nThat response was not formatted properly. Please respond with a champion and associated lane i.e. !find Ahri Mid \n")
+        await ctx.send("\nThat response was not formatted properly. Please respond with a champion and associated lane i.e. `find Ahri Mid \n")
         return
     list_of_proper_roles = ['Top', 'Mid', "ADC", "Jungle", "Support"]
     champ_role = list_of_proper_roles[list_of_roles.index(chosen_champ_and_role_cleaned[1].lower())]
@@ -86,5 +86,13 @@ async def find(ctx, *args):
     "\nSkill Order: " + list_to_build(champion_info_finder.paragraph_text_locator(champion_info_finder.win_rate_skill_orders)) +
     "\nDamage Classification: " + tupled_list_to_string(champion_info_finder.div_text_locator(champion_info_finder.win_rate_damage_classification))+"\n"
     )
+
+bot.run(TOKEN)
+
+@bot.command("help")
+async def find(ctx, *args):
+    if ctx.author.bot:
+        return
+    ctx.send("\nIn order to use RuneFinder. Use the command `find before the a champion and its associated lane i.e. `find Ahri Mid")
 
 bot.run(TOKEN)
