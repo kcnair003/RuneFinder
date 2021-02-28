@@ -29,10 +29,6 @@ class BlitzCrawler():
             self.champion_data_scraper()
         if matchups or winlane or counterlane:
             self.requested_matchups_info_builder()
-        if winlane:
-            self.winlane_web_scraper()
-        if counterlane:
-            self.counterlane_web_scraper()
         if winrate or items or spells or build or main_runes or side_runes or skills or damage:
             self.requested_winrate_info_builder(starting_items=items, summoners_spells=spells, final_items=build, primary_runes=main_runes, secondary_runes=side_runes, skill_order=skills, damage_breakdown=damage)
         return self
@@ -127,15 +123,7 @@ class BlitzCrawler():
         matchups_info = matchups_container.find('div', class_="Inner-sc-7vmxjm-0 cpZSJT")
         self.matchups_info_children = matchups_info.findChildren('div', recursive=False)
         self.lane_info_children = self.matchups_info_children[0].findChildren('div', recursive=False)
-        return self
-
-    #Scrapes for winning matchups
-    def winlane_web_scraper(self):
         self.winlane_info = self.lane_info_children[0]
-        return self
-
-    #Scrapes for losing matchups
-    def counterlane_web_scraper(self):
         self.counterlane_info = self.lane_info_children[2]
         return self
 
