@@ -51,11 +51,11 @@ def request_champ_and_role():
                 raise TypeError
             else:
                 list_of_roles = ['top', 'mid', "adc", "support", "sup", "supp", "jungle", "jg"]
-                list_of_third_arguement = ['winning', 'counter', 'counters', 'starting', 'summoners', 'secondary', 'build', 'skill', 'damage']
+                list_of_third_argument = ['winning', 'counter', 'counters', 'starting', 'summoners', 'secondary', 'build', 'skill', 'damage']
                 
                 if chosen_champ_and_role_cleaned[1].lower() not in list_of_roles:
                     raise ValueError
-                if ((len(chosen_champ_and_role_cleaned) > 2) and (chosen_champ_and_role_cleaned[2].lower() not in list_of_third_arguement)):
+                if ((len(chosen_champ_and_role_cleaned) > 2) and (chosen_champ_and_role_cleaned[2].lower() not in list_of_third_argument)):
                     raise ValueError
         except ValueError:
             proper_response=False
@@ -70,7 +70,6 @@ def request_champ_and_role():
         chosen_champ_and_role_cleaned[1] = "Support"
     if chosen_champ_and_role_cleaned[1].lower() == "jg":
         chosen_champ_and_role_cleaned[1] = "Jungle"
-    
     if len(chosen_champ_and_role_cleaned) == 2:
         matchups = winlane = counterlane = winrate = items = spells = build = main_runes = side_runes = skills = damage = True
     return chosen_champ_and_role_cleaned
