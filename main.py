@@ -37,7 +37,9 @@ def tupled_list_to_string(list):
     return final_string
 
 #Requests for a set of answers from the range of starting value to the expected max
+matchups = winlane = counterlane = winrate = items = spells = build = main_runes = side_runes = skills = damage = False
 def request_champ_and_role():
+    global matchups, winlane, counterlane, winrate, items, spells, build, main_runes, side_runes, skills, damage
     proper_response = False
     chosen_champ_and_role_cleaned = []
     while not proper_response:
@@ -45,11 +47,15 @@ def request_champ_and_role():
             requested_champ_and_role = input("\nType the champ and role that you would like separated with a space (i.e. !Ahri Mid)\n")
             proper_response = True
             chosen_champ_and_role_cleaned = list(map(str, requested_champ_and_role.split(' ')))
-            if len(chosen_champ_and_role_cleaned) != 2:
+            if len(chosen_champ_and_role_cleaned) == 1 or len(chosen_champ_and_role_cleaned) > 4:
                 raise TypeError
             else:
                 list_of_roles = ['top', 'mid', "adc", "support", "sup", "supp", "jungle", "jg"]
+                list_of_third_arguement = ['winning', 'counter', 'counters', 'starting', 'summoners', 'secondary', 'build', 'skill', 'damage']
+                
                 if chosen_champ_and_role_cleaned[1].lower() not in list_of_roles:
+                    raise ValueError
+                if ((len(chosen_champ_and_role_cleaned) > 2) and (chosen_champ_and_role_cleaned[2].lower() not in list_of_third_arguement)):
                     raise ValueError
         except ValueError:
             proper_response=False
@@ -64,6 +70,9 @@ def request_champ_and_role():
         chosen_champ_and_role_cleaned[1] = "Support"
     if chosen_champ_and_role_cleaned[1].lower() == "jg":
         chosen_champ_and_role_cleaned[1] = "Jungle"
+    
+    if len(chosen_champ_and_role_cleaned) == 2:
+        matchups = winlane = counterlane = winrate = items = spells = build = main_runes = side_runes = skills = damage = True
     return chosen_champ_and_role_cleaned
 
 #This is the main method that runs the code
@@ -73,7 +82,7 @@ def main():
         champion_info_finder = BlitzCrawler(user_response[0], user_response[1])
     except Exception as e:
         print(e)
-    champion_info_finder.requested_info_builder(True, True, True, True, True, True, True, True, True, True)
+    champion_info_finder.requested_info_builder(matchups, winlane, counterlane, winrate, items, spells, build, main_runes, side_runes, skills, damage)
     print("Winning Lanes: " + list_to_string(champion_info_finder.image_name_locater(champion_info_finder.winlane_info, 4))+"\n")
     print("Counter Lanes: " + list_to_string(champion_info_finder.image_name_locater(champion_info_finder.counterlane_info, 4))+"\n")
     print("Starting items: " + list_to_string(champion_info_finder.image_name_locater(champion_info_finder.win_rate_build_starting_items))+"\n")
