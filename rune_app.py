@@ -47,13 +47,13 @@ client = discord.Client()
 async def find(ctx, *args):
     if ctx.author.bot:
         return
-    chosen_champ_and_role_cleaned = args
+    chosen_champ_and_role = args
     list_of_roles = ['top', 'mid', "adc", "support", "sup", "supp", "jungle", "jg"]
     try:
-        if len(chosen_champ_and_role_cleaned) != 2:
+        if len(chosen_champ_and_role) != 2:
             raise TypeError
         else:
-            if chosen_champ_and_role_cleaned[1].lower() not in list_of_roles:
+            if chosen_champ_and_role[1].lower() not in list_of_roles:
                 raise ValueError
     except ValueError:
         await ctx.send("\nThat response contained a lane that does not exist. Please respond with one of the following lane options: Top, Mid, Jungle, ADC, or Support \n")
@@ -61,10 +61,16 @@ async def find(ctx, *args):
     except Exception:
         await ctx.send("\nThat response was not formatted properly. Please respond with a champion and associated lane i.e. `find Ahri Mid \n")
         return
-    list_of_proper_roles = ['Top', 'Mid', "ADC", "Jungle", "Support"]
-    champ_role = list_of_proper_roles[list_of_roles.index(chosen_champ_and_role_cleaned[1].lower())]
+    mispelled_sup = ['sup', 'supp']
+    if chosen_champ_and_role[1].lower() in mispelled_sup:
+        champ_role = "Support"
+    elif chosen_champ_and_role[1].lower() == 'jg':
+        champ_role = "Jungle"
+    else:
+        list_of_proper_roles = ['Top', 'Mid', "ADC", "Jungle", "Support"]
+        champ_role = list_of_proper_roles[list_of_roles.index(chosen_champ_and_role[1].lower())]
     try:
-        champion_info_finder = BlitzCrawler(chosen_champ_and_role_cleaned[0], champ_role)
+        champion_info_finder = BlitzCrawler(chosen_champ_and_role[0], champ_role)
     except HTTPError as e:
         await ctx.send("\nThere was an internal server error. Try again in 24 hours and contact the developers if the problem persists. \n" + str(e))
         return

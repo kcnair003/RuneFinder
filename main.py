@@ -53,9 +53,9 @@ def request_champ_and_role():
                 list_of_roles = ['top', 'mid', "adc", "support", "sup", "supp", "jungle", "jg"]
                 list_of_third_argument = ['winning', 'counter', 'counters', 'starting', 'summoners', 'secondary', 'build', 'skill', 'damage']
                 
-                if chosen_champ_and_role_cleaned[1].lower() not in list_of_roles:
+                if chosen_champ_and_role_cleaned[2].lower() not in list_of_roles:
                     raise ValueError
-                if ((len(chosen_champ_and_role_cleaned) > 2) and (chosen_champ_and_role_cleaned[2].lower() not in list_of_third_argument)):
+                if ((len(chosen_champ_and_role_cleaned) > 3) and (chosen_champ_and_role_cleaned[3].lower() not in list_of_third_argument)):
                     raise ValueError
         except ValueError:
             proper_response=False
@@ -65,12 +65,12 @@ def request_champ_and_role():
             delay_print("\nThat response was not formatted properly. Please respond with a champion and associated lane i.e. !Ahri Mid \n")
     if "!" in chosen_champ_and_role_cleaned[0]:
         champ_name = chosen_champ_and_role_cleaned[0].replace("!", '')
-        chosen_champ_and_role_cleaned[0] = champ_name
-    if chosen_champ_and_role_cleaned[1].lower() in 'support':
-        chosen_champ_and_role_cleaned[1] = "Support"
-    if chosen_champ_and_role_cleaned[1].lower() == "jg":
-        chosen_champ_and_role_cleaned[1] = "Jungle"
-    if len(chosen_champ_and_role_cleaned) == 2:
+        chosen_champ_and_role_cleaned[1] = champ_name
+    if chosen_champ_and_role_cleaned[2].lower() in 'support':
+        chosen_champ_and_role_cleaned[2] = "Support"
+    if chosen_champ_and_role_cleaned[2].lower() == "jg":
+        chosen_champ_and_role_cleaned[2] = "Jungle"
+    if len(chosen_champ_and_role_cleaned) == 3:
         matchups = winlane = counterlane = winrate = items = spells = build = main_runes = side_runes = skills = damage = True
     return chosen_champ_and_role_cleaned
 
@@ -78,19 +78,19 @@ def request_champ_and_role():
 def main():
     user_response = request_champ_and_role()
     try:
-        champion_info_finder = BlitzCrawler(user_response[0], user_response[1])
+        champion_info_finder = BlitzCrawler(user_response[1], user_response[2])
+        champion_info_finder.requested_info_builder(matchups, winlane, counterlane, winrate, items, spells, build, main_runes, side_runes, skills, damage)
+        print("Winning Lanes: " + list_to_string(champion_info_finder.image_name_locater(champion_info_finder.winlane_info, 4))+"\n")
+        print("Counter Lanes: " + list_to_string(champion_info_finder.image_name_locater(champion_info_finder.counterlane_info, 4))+"\n")
+        print("Starting items: " + list_to_string(champion_info_finder.image_name_locater(champion_info_finder.win_rate_build_starting_items))+"\n")
+        print("Summoners: " + list_to_string(champion_info_finder.image_name_locater(champion_info_finder.win_rate_build_summoner_spells, 3))+"\n")
+        print("Primary Runes: " + list_to_string(champion_info_finder.image_name_locater(champion_info_finder.win_rate_runes_primary_tree, 2))+"\n")
+        print("Secondary Runes: " + list_to_string(champion_info_finder.image_name_locater(champion_info_finder.win_rate_runes_secondary_tree, 2))+"\n")
+        print("Build: " + list_to_build(champion_info_finder.image_name_locater(champion_info_finder.win_rate_final_items_build))+"\n")
+        print("Skill Order: " + list_to_build(champion_info_finder.paragraph_text_locator(champion_info_finder.win_rate_skill_orders))+"\n")
+        print("Damage Classification: " + tupled_list_to_string(champion_info_finder.div_text_locator(champion_info_finder.win_rate_damage_classification))+"\n")
     except Exception as e:
         print(e)
-    champion_info_finder.requested_info_builder(matchups, winlane, counterlane, winrate, items, spells, build, main_runes, side_runes, skills, damage)
-    print("Winning Lanes: " + list_to_string(champion_info_finder.image_name_locater(champion_info_finder.winlane_info, 4))+"\n")
-    print("Counter Lanes: " + list_to_string(champion_info_finder.image_name_locater(champion_info_finder.counterlane_info, 4))+"\n")
-    print("Starting items: " + list_to_string(champion_info_finder.image_name_locater(champion_info_finder.win_rate_build_starting_items))+"\n")
-    print("Summoners: " + list_to_string(champion_info_finder.image_name_locater(champion_info_finder.win_rate_build_summoner_spells, 3))+"\n")
-    print("Primary Runes: " + list_to_string(champion_info_finder.image_name_locater(champion_info_finder.win_rate_runes_primary_tree, 2))+"\n")
-    print("Secondary Runes: " + list_to_string(champion_info_finder.image_name_locater(champion_info_finder.win_rate_runes_secondary_tree, 2))+"\n")
-    print("Build: " + list_to_build(champion_info_finder.image_name_locater(champion_info_finder.win_rate_final_items_build))+"\n")
-    print("Skill Order: " + list_to_build(champion_info_finder.paragraph_text_locator(champion_info_finder.win_rate_skill_orders))+"\n")
-    print("Damage Classification: " + tupled_list_to_string(champion_info_finder.div_text_locator(champion_info_finder.win_rate_damage_classification))+"\n")
 
 
 main()
