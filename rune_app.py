@@ -7,12 +7,6 @@ import discord
 from bs4 import BeautifulSoup
 from blitz_crawler import BlitzCrawler
 
-#Prints lines in animated sequence
-def delay_print(item):
-    for character in item:
-        print(character, end='', flush=True)
-        time.sleep(0.05)
-
 #Converts lists into string; USED:Summoners,Runes
 def list_to_string(list):
     final_string=""
