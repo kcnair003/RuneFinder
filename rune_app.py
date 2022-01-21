@@ -98,7 +98,7 @@ async def find(ctx, *args):
         primary_runes = list_to_string(champion_info_finder.image_name_locater(champion_info_finder.win_rate_runes_primary_tree, 2))
     except Exception as e:
         missing_info = True
-        await ctx.send(str(champion_info_finder.win_rate_build_skill_order) + str(champion_info_finder.win_rate_runes_tree_children))
+        await ctx.send(str(champion_info_finder.win_rate_build_skill_order) + str(champion_info_finder.win_rate_runes_children))
     try:
         secondary_runes = list_to_string(champion_info_finder.image_name_locater(champion_info_finder.win_rate_runes_secondary_tree, 2))
     except Exception as e:
