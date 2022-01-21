@@ -72,7 +72,6 @@ async def find(ctx, *args):
         champ_role = list_of_proper_roles[list_of_roles.index(chosen_champ_and_role[1].lower())]
     try:
         champion_info_finder = BlitzCrawler(chosen_champ_and_role[0], champ_role)
-        await ctx.send(chosen_champ_and_role[0] + "\n" + champ_role)
     except HTTPError as e:
         await ctx.send("\nThere was an internal server error. Try again in 24 hours and contact the developers if the problem persists. \n" + str(e))
         return
@@ -116,20 +115,12 @@ async def find(ctx, *args):
     except Exception as e:
         missing_info = True
     
-    if missing_info:
-        await ctx.send("\nSome portion of the data was missing. Here is what could be found: \n")
+    info = "Winning Lanes: {win} \n Counter Lanes: {counter} \n Starting Items: {items} \n Summoner's Spells: {spells} \n Primary Runes: {primary_runes} \n Secondary Runes: {secondary_runes} \n Build: {build} \n Skill Order: {skills} \n Primary Damage Type: {damage}".format(win=winning_lanes, counter=counter_lanes, items=starting_items, spells=spells, primary_runes=primary_runes, secondary_runes=secondary_runes, build=build, skills=skills, damage=damage_type)
 
-    await ctx.send(
-    "Winning Lanes: " + winning_lanes +
-    "\nCounter Lanes: " + counter_lanes +
-    "\nStarting items: " + starting_items + 
-    "\nSummoners: " + spells + 
-    "\nPrimary Runes: " + primary_runes +
-    "\nSecondary Runes: " + secondary_runes +
-    "\nBuild: " + build +
-    "\nSkill Order: " + skills +
-    "\nDamage Classification: " + damage_type +"\n"
-    )
+    if missing_info:
+        info = "\nSome portion of the data was missing. Here is what could be found: \n" + info
+
+    await ctx.send(info)
 
 @bot.command("help")
 async def help(ctx, *args):
