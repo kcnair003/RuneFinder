@@ -76,7 +76,7 @@ async def find(ctx, *args):
         await ctx.send("\nThere was an internal server error. Try again in 24 hours and contact the developers if the problem persists. \n" + str(e))
         return
     champion_info_finder.requested_info_builder(True, True, True, True, True, True, True)
-    winning_lanes = counter_lanes = starting_items = spells = secondary_runes = build = skills = damage_type = ""
+    winning_lanes = counter_lanes = starting_items = spells = primary_runes = secondary_runes = build = skills = damage_type = ""
     missing_info = False
     try:
         winning_lanes = list_to_string(champion_info_finder.image_name_locater(champion_info_finder.winlane_info, 4))
