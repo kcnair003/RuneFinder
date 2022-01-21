@@ -77,16 +77,58 @@ async def find(ctx, *args):
         await ctx.send("\nThere was an internal server error. Try again in 24 hours and contact the developers if the problem persists. \n" + str(e))
         return
     champion_info_finder.requested_info_builder(True, True, True, True, True, True, True)
+    winning_lanes, counter_lanes, starting_items, spells, secondary_runes, build, skills, damage_type = ""
+    missing_info = False
+    try:
+        winning_lanes = list_to_string(champion_info_finder.image_name_locater(champion_info_finder.winlane_info, 4))
+    except Exception as e:
+        missing_info = True
+    try:
+        counter_lanes = list_to_string(champion_info_finder.image_name_locater(champion_info_finder.counterlane_info, 4))
+    except Exception as e:
+        missing_info = True
+    try:
+        starting_items = list_to_string(champion_info_finder.image_name_locater(champion_info_finder.win_rate_build_starting_items))
+    except Exception as e:
+        missing_info = True
+    try:
+        spells = list_to_string(champion_info_finder.image_name_locater(champion_info_finder.win_rate_build_summoner_spells, 3))
+    except Exception as e:
+        missing_info = True
+    try:
+        primary_runes = list_to_string(champion_info_finder.image_name_locater(champion_info_finder.win_rate_runes_primary_tree, 2))
+    except Exception as e:
+        missing_info = True
+    try:
+        secondary_runes = list_to_string(champion_info_finder.image_name_locater(champion_info_finder.win_rate_runes_secondary_tree, 2))
+    except Exception as e:
+        missing_info = True
+    try:
+        build = list_to_build(champion_info_finder.image_name_locater(champion_info_finder.win_rate_final_items_build))
+    except Exception as e:
+        missing_info = True
+    try:
+        skills = list_to_build(champion_info_finder.paragraph_text_locator(champion_info_finder.win_rate_skill_orders))
+    except Exception as e:
+        missing_info = True
+    try:
+        damage_type = tupled_list_to_string(champion_info_finder.div_text_locator(champion_info_finder.win_rate_damage_classification))
+    except Exception as e:
+        missing_info = True
+    
+    if missing_info:
+        await ctx.send("\nSome portion of the data was missing. Here is what could be found: \n")
+
     await ctx.send(
-    "Winning Lanes: " + list_to_string(champion_info_finder.image_name_locater(champion_info_finder.winlane_info, 4)) +
-    "\nCounter Lanes: " + list_to_string(champion_info_finder.image_name_locater(champion_info_finder.counterlane_info, 4)) +
-    "\nStarting items: " + list_to_string(champion_info_finder.image_name_locater(champion_info_finder.win_rate_build_starting_items)) + 
-    "\nSummoners: " + list_to_string(champion_info_finder.image_name_locater(champion_info_finder.win_rate_build_summoner_spells, 3)) + 
-    "\nPrimary Runes: " + list_to_string(champion_info_finder.image_name_locater(champion_info_finder.win_rate_runes_primary_tree, 2)) +
-    "\nSecondary Runes: " + list_to_string(champion_info_finder.image_name_locater(champion_info_finder.win_rate_runes_secondary_tree, 2)) +
-    "\nBuild: " + list_to_build(champion_info_finder.image_name_locater(champion_info_finder.win_rate_final_items_build)) +
-    "\nSkill Order: " + list_to_build(champion_info_finder.paragraph_text_locator(champion_info_finder.win_rate_skill_orders)) +
-    "\nDamage Classification: " + tupled_list_to_string(champion_info_finder.div_text_locator(champion_info_finder.win_rate_damage_classification))+"\n"
+    "Winning Lanes: " + winning_lanes +
+    "\nCounter Lanes: " + counter_lanes +
+    "\nStarting items: " + starting_items + 
+    "\nSummoners: " + spells + 
+    "\nPrimary Runes: " + primary_runes +
+    "\nSecondary Runes: " + secondary_runes +
+    "\nBuild: " + build +
+    "\nSkill Order: " + skills +
+    "\nDamage Classification: " + damage_type +"\n"
     )
 
 @bot.command("help")
