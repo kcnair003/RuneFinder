@@ -98,6 +98,7 @@ async def find(ctx, *args):
         primary_runes = list_to_string(champion_info_finder.image_name_locater(champion_info_finder.win_rate_runes_primary_tree, 2))
     except Exception as e:
         missing_info = True
+        await ctx.send(str(champion_info_finder.win_rate_build_skill_order) + str(champion_info_finder.win_rate_runes_tree_children))
     try:
         secondary_runes = list_to_string(champion_info_finder.image_name_locater(champion_info_finder.win_rate_runes_secondary_tree, 2))
     except Exception as e:
@@ -115,7 +116,7 @@ async def find(ctx, *args):
     except Exception as e:
         missing_info = True
     
-    info = "Winning Lanes: {win} \n Counter Lanes: {counter} \n Starting Items: {items} \n Summoner's Spells: {spells} \n Primary Runes: {primary_runes} \n Secondary Runes: {secondary_runes} \n Build: {build} \n Skill Order: {skills} \n Primary Damage Type: {damage}".format(win=winning_lanes, counter=counter_lanes, items=starting_items, spells=spells, primary_runes=primary_runes, secondary_runes=secondary_runes, build=build, skills=skills, damage=damage_type)
+    info = "Winning Lanes: {win} \nCounter Lanes: {counter} \nStarting Items: {items} \nSummoner's Spells: {spells} \nPrimary Runes: {primary_runes} \nSecondary Runes: {secondary_runes} \nBuild: {build} \nSkill Order: {skills} \nPrimary Damage Type: {damage}".format(win=winning_lanes, counter=counter_lanes, items=starting_items, spells=spells, primary_runes=primary_runes, secondary_runes=secondary_runes, build=build, skills=skills, damage=damage_type)
 
     if missing_info:
         info = "\nSome portion of the data was missing. Here is what could be found: \n" + info
