@@ -74,7 +74,6 @@ class BlitzCrawler():
                 try:
                     if not requested_item == 'champ':
                         image_name = re.search('<' + requested_item + 'name>(.+?)</' + requested_item + 'name>',image['data-tip']).group(1)
-                        final_images.append(image_name)
                     else:
                         image_name = image['alt']
                     final_images.append(image_name)

@@ -72,6 +72,7 @@ async def find(ctx, *args):
         champ_role = list_of_proper_roles[list_of_roles.index(chosen_champ_and_role[1].lower())]
     try:
         champion_info_finder = BlitzCrawler(chosen_champ_and_role[0], champ_role)
+        await ctx.send(chosen_champ_and_role[0] + "\n" + champ_role)
     except HTTPError as e:
         await ctx.send("\nThere was an internal server error. Try again in 24 hours and contact the developers if the problem persists. \n" + str(e))
         return
